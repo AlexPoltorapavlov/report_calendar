@@ -1,5 +1,5 @@
 require 'date'
-require 'holidays'
+require 'net/http'
 
 # ReportCalendar is the usefull app for trecking your report deadlines.
 class ReportCalendar
@@ -7,15 +7,20 @@ class ReportCalendar
     # code
   end
 
+  def workday?(date)
+    date = date.to_s
+    date = date.gsub(/\D/, '')
+    source = Net::HTTP.get('isdayoff.ru', "/#{date}")
+  end
+
   def today_date
-    Date.today
+    date = Date.today
   end
 
   def add_weekdays(date, days)
     while days > 0
       date = date + 1
-      unless date.saturday? || date.sunday? || Holidays.on(date, :ru).any?
-        p date
+      if self.workday?(date) == "0"
         days -= 1
       end
     end
@@ -25,5 +30,4 @@ class ReportCalendar
 end
 
 a = ReportCalendar.new
-b = a.today_date
-puts a.add_weekdays(b, 10)
+puts a.add_weekdays(a.today_date, 10)
