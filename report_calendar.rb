@@ -107,6 +107,7 @@ class ReportCalendar
   end
 
 <<<<<<< HEAD
+<<<<<<< HEAD
   def update_info(year = today_date.year)
     uri1 = URI("https://isdayoff.ru/api/getdata?year=#{year}")
     uri2 = URI("https://isdayoff.ru/api/getdata?year=#{year + 1}")
@@ -127,5 +128,17 @@ class ReportCalendar
   def update_calendar
 
 >>>>>>> df595a1 (Fixed: change today_date for ReportCalendar using more useful tool)
+=======
+  def add_weekdays(date, days)
+    while days > 0
+      date = date + 1
+      unless date.saturday? || date.sunday? || Holidays.on(date, :ru).any?
+        p date
+        days -= 1
+      end
+    end
+    date
+>>>>>>> 5059a20 (Update: add 'add_weekdays' method for ReportCalendar)
   end
+
 end
