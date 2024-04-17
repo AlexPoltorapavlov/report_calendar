@@ -75,7 +75,7 @@ DEPENDENCIES
   rubocop (>= 1.21)
 =======
   rspec (~> 3.0)
-  rubocop (~> 1.21)
+  rubocop (>= 1.21)
   russian_workdays (>= 2.6)
   workdays (>= 0.1.1)
 >>>>>>> ade1320 (Fixed: add_weekdays for ReportCalendar)
