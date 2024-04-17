@@ -7,4 +7,16 @@ gemspec
 
 gem "rake", "~> 13.0"
 
+<<<<<<< HEAD
 gem "rubocop", ">= 1.21"
+=======
+gem "rspec", "~> 3.0"
+
+gem "rubocop", "~> 1.21"
+
+gem 'holidays', '~> 8.7', '>= 8.7.1'
+
+gem 'russian_workdays', '>= 2.6'
+
+gem 'workdays', '>= 0.1.1'
+>>>>>>> ade1320 (Fixed: add_weekdays for ReportCalendar)

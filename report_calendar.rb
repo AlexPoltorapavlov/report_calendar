@@ -102,12 +102,16 @@ class ReportCalendar
     @current_calendar[date]
   end
 
-  def today_date
-    Date.today
+  def workday?(date)
+    date = date.to_s
+    date = date.gsub(/\D/, '')
+    source = Net::HTTP.get('isdayoff.ru', "/#{date}")
   end
 
-<<<<<<< HEAD
-<<<<<<< HEAD
+  def today_date
+    date = Date.today
+  end
+
   def update_info(year = today_date.year)
     uri1 = URI("https://isdayoff.ru/api/getdata?year=#{year}")
     uri2 = URI("https://isdayoff.ru/api/getdata?year=#{year + 1}")
@@ -124,21 +128,15 @@ class ReportCalendar
       days -= 1 if workday?(date) == "0"
     end
     date
-=======
-  def update_calendar
+  end
 
->>>>>>> df595a1 (Fixed: change today_date for ReportCalendar using more useful tool)
-=======
   def add_weekdays(date, days)
     while days > 0
       date = date + 1
-      unless date.saturday? || date.sunday? || Holidays.on(date, :ru).any?
-        p date
+      if self.workday?(date) == "0"
         days -= 1
       end
     end
     date
->>>>>>> 5059a20 (Update: add 'add_weekdays' method for ReportCalendar)
   end
-
 end
