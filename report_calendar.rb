@@ -106,6 +106,7 @@ class ReportCalendar
     Date.today
   end
 
+<<<<<<< HEAD
   def update_info(year = today_date.year)
     uri1 = URI("https://isdayoff.ru/api/getdata?year=#{year}")
     uri2 = URI("https://isdayoff.ru/api/getdata?year=#{year + 1}")
@@ -122,5 +123,9 @@ class ReportCalendar
       days -= 1 if workday?(date) == "0"
     end
     date
+=======
+  def update_calendar
+
+>>>>>>> df595a1 (Fixed: change today_date for ReportCalendar using more useful tool)
   end
 end
