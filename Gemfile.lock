@@ -83,7 +83,7 @@ DEPENDENCIES
   rake (~> 13.0)
   report_calendar!
   rspec (~> 3.0)
-  rubocop (~> 1.21)
+  rubocop (>= 1.21)
   russian_workdays (>= 2.6)
   workdays (>= 0.1.1)
 
