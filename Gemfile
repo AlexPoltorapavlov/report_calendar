@@ -10,3 +10,7 @@ gem "rake", "~> 13.0"
 gem "rspec", "~> 3.0"
 
 gem "rubocop", "~> 1.21"
+
+gem 'holidays', '~> 8.7', '>= 8.7.1',
+
+gem 'russian_workdays', '~> 2.6'

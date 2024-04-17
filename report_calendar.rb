@@ -1,4 +1,5 @@
 require 'date'
+require 'holidays'
 
 # ReportCalendar is the usefull app for trecking your report deadlines.
 class ReportCalendar
@@ -10,10 +11,19 @@ class ReportCalendar
     Date.today
   end
 
-  def update_calendar
-
+  def add_weekdays(date, days)
+    while days > 0
+      date = date + 1
+      unless date.saturday? || date.sunday? || Holidays.on(date, :ru).any?
+        p date
+        days -= 1
+      end
+    end
+    date
   end
+
 end
 
 a = ReportCalendar.new
-puts a.today_date
+b = a.today_date
+puts a.add_weekdays(b, 10)
