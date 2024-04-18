@@ -125,15 +125,17 @@ class ReportCalendar
 
   def monthly_report_weekdays
     date = today_date
-    report_day = Date.new(date.year, date.month, 1)
+
+    next_month = date.month == 12 ? 1 : date.month + 1
+    year = date.month == 12 ? date.year + 1 : date.year
+
+    report_day = Date.new(year, next_month, 1)
+
     report_day = add_weekdays(report_day, 10)
 
-    if date.month == 12 || date > report_day
-      report_day = Date.new(date.month == 12 ? date.year + 1 : date.year, date.month % 12 + 1, 1)
-      report_day = add_weekdays(report_day, 10)
-    end
+    remaining_days = (report_day - date).to_i
 
-    [report_day, " - месячный отчет по рабочим дням. Осталось дней: ", (report_day - date).to_i]
+    [report_day, " - месячный отчет по рабочим дням. Осталось дней: ", remaining_days]
   end
 
   def workday?(date)
