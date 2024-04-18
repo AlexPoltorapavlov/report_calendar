@@ -123,6 +123,22 @@ class ReportCalendar
     @current_calendar[date]
   end
 
+  def annual_report_weekdays
+    date = today_date
+    year = date.month == 1 ? date.year : date.year + 1
+    report_day = Date.new(year, 1, 1)
+    report_day = add_weekdays(report_day)
+    return report_day if (report_day - date).positive?
+
+    add_weekdays(Date.new(year + 1, 1, 1))
+  end
+
+  def annual_report
+    date = today_date
+    year = date.month == 1 && date.day != 31 ? date.year : date.year + 1
+    Date.new(year, 1, 30)
+  end
+
   def quarterly_report_day
     date = today_date
     months_for_report = [Date.new(date.year, 4, 30), Date.new(date.year, 7, 30), Date.new(date.year, 10, 30)]
@@ -131,7 +147,19 @@ class ReportCalendar
     end
   end
 
-  def monthly_report_day
+  def quarterly_report_weekdays
+    date = today_date
+    months_for_report = [Date.new(date.year, 4, 1), Date.new(date.year, 7, 1), Date.new(date.year, 10, 1)]
+    months_for_report = months_for_report.map do |report_day|
+      add_weekdays(report_day)
+    end
+
+    months_for_report.each do |report_day|
+      return report_day if (report_day - date).positive?
+    end
+  end
+
+  def monthly_report
     date = today_date
     next_month = date.month == 12 ? 1 : date.month + 1
     year = date.month == 12 ? date.year + 1 : date.year
@@ -149,14 +177,6 @@ class ReportCalendar
     Date.today
   end
 
-  def update_info(year = today_date.year)
-    uri = URI("https://isdayoff.ru/api/getdata?year=#{year}")
-    workdays = Net::HTTP.get(uri)
-    dates = (Date.new(year)..Date.new(year, -1, -1)).to_a
-    Hash[dates.zip(workdays.chars)]
-  end
-
-<<<<<<< HEAD
   def update_info(year = today_date.year)
     uri1 = URI("https://isdayoff.ru/api/getdata?year=#{year}")
     uri2 = URI("https://isdayoff.ru/api/getdata?year=#{year + 1}")
