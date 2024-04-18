@@ -25,19 +25,22 @@ class ReportCalendar
     # code
   end
 
-  def monthly_report_weekdays
+  def quarterly_report_day
     date = today_date
+    months_for_report = [Date.new(date.year, 4, 30), Date.new(date.year, 7, 30), Date.new(date.year, 10, 30)]
+    months_for_report.each do |report_day|
+      return report_day if (report_day - date).positive?
+    end
+  end
 
+  def monthly_report_day
+    date = today_date
     next_month = date.month == 12 ? 1 : date.month + 1
     year = date.month == 12 ? date.year + 1 : date.year
+    current_month_report = add_weekdays(Date.new(date.year, date.month, 1))
+    return current_month_report unless (date - current_month_report).to_i.positive?
 
-    report_day = Date.new(year, next_month, 1)
-
-    report_day = add_weekdays(report_day, 10)
-
-    remaining_days = (report_day - date).to_i
-
-    [report_day, " - месячный отчет по рабочим дням. Осталось дней: ", remaining_days]
+    add_weekdays(Date.new(year, next_month, 1))
   end
 
   def workday?(date)
@@ -55,7 +58,7 @@ class ReportCalendar
     Hash[dates.zip(workdays.chars)]
   end
 
-  def add_weekdays(date, days)
+  def add_weekdays(date, days = 10)
     while days.positive?
       date += 1
       days -= 1 if workday?(date) == "0"
@@ -65,4 +68,4 @@ class ReportCalendar
 end
 
 a = ReportCalendar.new
-puts a.monthly_report_weekdays
+puts a.quarterly_report
