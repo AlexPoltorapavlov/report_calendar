@@ -45,20 +45,55 @@ class ReportCalendar
 >>>>>>> dd20150 (Update: fixed updating info about workays)
   def initialize
     @current_calendar = update_info
+    @report_types = { monthly: "месячная - сдается в течении 10 рабочих дней",
+                      quarterly_weekdays: "квартальная (март, июнь, сентябрь) - сдается в течении 10 рабочих дней",
+                      quarterly: "квартальная (март, июнь, сентябрь) - сдается в течении 30 календарных дней",
+                      annual_weekdays: "годовая - сдается в течении 10 рабочих дней",
+                      annual: "годовая - сдается в течении 30 календарных дней" }
   end
 
   def closest_report
+<<<<<<< HEAD
     report_dates = [annual_report, annual_report_weekdays, quarterly_report, quarterly_report_weekdays, monthly_report]
     closest_date = report_dates.min_by { |report| report[0] }
     current_report_dates = report_dates.select { |i| i[1] <= closest_date[0] }
 
     current_report_dates.each { |report_info| p output_format(report_info[0], report_info[2]) }
+=======
+    date = today_date
+    report_annual = annual_report
+    report_annual_weekdays = annual_report_weekdays
+    report_quarterly = quarterly_report
+    report_quarterly_weekdays = quarterly_report_weekdays
+    report_monthly = monthly_report
+    report_dates = [report_annual - date, report_annual_weekdays - date, report_quarterly - date,
+                    report_quarterly_weekdays - date, report_monthly - date]
+
+    if report_dates[1] == report_dates.min
+      p output_format(report_annual_weekdays, :annual_weekdays)
+      p output_format(report_monthly, :monthly)
+      p output_format(report_annual, :annual)
+    elsif report_dates[0] == report_dates.min
+      p output_format(report_annual, :annual)
+    elsif report_dates[3] == report_dates.min
+      p output_format(report_quarterly_weekdays, :quarterly_weekdays)
+      p output_format(report_monthly, :monthly)
+      p output_format(report_quarterly, :quarterly)
+    elsif report_dates[2] == report_dates.min
+      p output_format(report_quarterly, :quarterly)
+    elsif report_dates[4] == report_dates.min
+      p output_format(report_monthly, :monthly)
+    else
+      p "Обратитесь к администратору"
+    end
+>>>>>>> 57d6d82 (Update: output_format for closest_report and closest_report for ReportCalendar)
   end
 
   def output_format(report_date, report_type)
     first = "#{report_date} крайний срок отчетности"
     date = report_date - today_date
     second = "Осталось: #{date.to_i} дней"
+<<<<<<< HEAD
     third = "Тип отчетности: #{REPORT_TYPES[report_type]}"
     [first, second, third].join(" | ")
   end
@@ -121,6 +156,10 @@ class ReportCalendar
 
   def workday?(date)
     @current_calendar[date]
+=======
+    third = "Тип отчетности: #{@report_types[report_type]}"
+    [first, second, third].join(" | ")
+>>>>>>> 57d6d82 (Update: output_format for closest_report and closest_report for ReportCalendar)
   end
 
   def annual_report_weekdays
@@ -139,7 +178,7 @@ class ReportCalendar
     Date.new(year, 1, 30)
   end
 
-  def quarterly_report_day
+  def quarterly_report
     date = today_date
     months_for_report = [Date.new(date.year, 4, 30), Date.new(date.year, 7, 30), Date.new(date.year, 10, 30)]
     months_for_report.each do |report_day|
@@ -174,7 +213,8 @@ class ReportCalendar
   end
 
   def today_date
-    Date.today
+    # Date.today
+    Date.new(2024, 7, 10)
   end
 
   def update_info(year = today_date.year)
