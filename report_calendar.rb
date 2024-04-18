@@ -123,19 +123,22 @@ class ReportCalendar
     @current_calendar[date]
   end
 
-  def monthly_report_weekdays
+  def quarterly_report_day
     date = today_date
+    months_for_report = [Date.new(date.year, 4, 30), Date.new(date.year, 7, 30), Date.new(date.year, 10, 30)]
+    months_for_report.each do |report_day|
+      return report_day if (report_day - date).positive?
+    end
+  end
 
+  def monthly_report_day
+    date = today_date
     next_month = date.month == 12 ? 1 : date.month + 1
     year = date.month == 12 ? date.year + 1 : date.year
+    current_month_report = add_weekdays(Date.new(date.year, date.month, 1))
+    return current_month_report unless (date - current_month_report).to_i.positive?
 
-    report_day = Date.new(year, next_month, 1)
-
-    report_day = add_weekdays(report_day, 10)
-
-    remaining_days = (report_day - date).to_i
-
-    [report_day, " - месячный отчет по рабочим дням. Осталось дней: ", remaining_days]
+    add_weekdays(Date.new(year, next_month, 1))
   end
 
   def workday?(date)
@@ -153,6 +156,7 @@ class ReportCalendar
     Hash[dates.zip(workdays.chars)]
   end
 
+<<<<<<< HEAD
   def update_info(year = today_date.year)
     uri1 = URI("https://isdayoff.ru/api/getdata?year=#{year}")
     uri2 = URI("https://isdayoff.ru/api/getdata?year=#{year + 1}")
