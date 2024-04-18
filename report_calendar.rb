@@ -1,8 +1,13 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 # frozen_string_literal: true
 
 =======
 >>>>>>> 1264e11 (Update: added monthly_report for ReportCalendar)
+=======
+# frozen_string_literal: true
+
+>>>>>>> dd20150 (Update: fixed updating info about workays)
 # Вам нужно сдавать отчётность. И вы хотели бы знать сколько дней осталось до следующей сдачи. Есть несколько типов
 # отчетности:
 #
@@ -15,6 +20,7 @@
 # Первый день сдачи - это начало следующего месяца. Нужно создать программу, которая возвращает крайний день сдачи
 # отчетности, и сколько дней осталось до этой даты относительно текущего времени, тип отчетности.
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 require "date"
 require "net/http"
@@ -30,6 +36,13 @@ class ReportCalendar
                    quarterly: "квартальная (март, июнь, сентябрь) - сдается в течении 30 календарных дней",
                    annual_weekdays: "годовая - сдается в течении 10 рабочих дней",
                    annual: "годовая - сдается в течении 30 календарных дней" }.freeze
+=======
+require "date"
+require "net/http"
+
+# ReportCalendar is the usefull app for trecking your report deadlines.
+class ReportCalendar
+>>>>>>> dd20150 (Update: fixed updating info about workays)
   def initialize
     @current_calendar = update_info
   end
@@ -110,30 +123,32 @@ class ReportCalendar
     @current_calendar[date]
   end
 
-  def monthly_report
-    date = self.today_date
-    current_month_report_day = Date.new(date.year, date.month, 1)
-    current_month_report_day = self.add_weekdays(current_month_report_day, 10)
+  def monthly_report_weekdays
+    date = today_date
+    report_day = Date.new(date.year, date.month, 1)
+    report_day = add_weekdays(report_day, 10)
 
-    return current_month_report_day if date <= current_month_report_day
-
-    next_month_report_day = Date.new(date.year, date.month + 1, 1)
-    if date.month == 12
-      next_month_report_day = Date.new(date.year, 1, 1)
+    if date.month == 12 || date > report_day
+      report_day = Date.new(date.month == 12 ? date.year + 1 : date.year, date.month % 12 + 1, 1)
+      report_day = add_weekdays(report_day, 10)
     end
 
-    next_month_report_day = self.add_weekdays(next_month_report_day, 10)
-    next_month_report_day
+    [report_day, " - месячный отчет по рабочим дням. Осталось дней: ", (report_day - date).to_i]
   end
 
   def workday?(date)
-    date = date.to_s
-    date = date.gsub(/\D/, '')
-    source = Net::HTTP.get('isdayoff.ru', "/#{date}")
+    @current_calendar[date]
   end
 
   def today_date
-    date = Date.today
+    Date.today
+  end
+
+  def update_info(year = today_date.year)
+    uri = URI("https://isdayoff.ru/api/getdata?year=#{year}")
+    workdays = Net::HTTP.get(uri)
+    dates = (Date.new(year)..Date.new(year, -1, -1)).to_a
+    Hash[dates.zip(workdays.chars)]
   end
 
   def update_info(year = today_date.year)
@@ -155,11 +170,9 @@ class ReportCalendar
   end
 
   def add_weekdays(date, days)
-    while days > 0
-      date = date + 1
-      if self.workday?(date) == "0"
-        days -= 1
-      end
+    while days.positive?
+      date += 1
+      days -= 1 if workday?(date) == "0"
     end
     date
   end
