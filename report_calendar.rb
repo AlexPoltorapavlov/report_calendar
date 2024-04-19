@@ -48,7 +48,6 @@ class ReportCalendar
     start_report_day = Date.new(year, 1, 1)
     report_day = add_weekdays(start_report_day)
     return [report_day, start_report_day, :annual_weekdays] if (report_day - date).positive?
-<<<<<<< HEAD
 
     [add_weekdays(Date.new(year + 1, 1, 1)), Date.new(year + 1, 1, 1), :annual_weekdays]
   end
