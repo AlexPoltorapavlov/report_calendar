@@ -2,5 +2,5 @@
 
 require_relative "report_calendar"
 
-report_closest_dates = ReportCalendar.new
-report_closest_dates.closest_report
+calendar = ReportCalendar.new
+p calendar.output_format(calendar.annual_report[0], calendar.annual_report[2])
