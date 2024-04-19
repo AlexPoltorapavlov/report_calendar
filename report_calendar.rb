@@ -17,13 +17,13 @@ require "net/http"
 
 # ReportCalendar is the usefull app for trecking your report deadlines.
 class ReportCalendar
+  REPORT_TYPES = { monthly: "месячная - сдается в течении 10 рабочих дней",
+                   quarterly_weekdays: "квартальная (март, июнь, сентябрь) - сдается в течении 10 рабочих дней",
+                   quarterly: "квартальная (март, июнь, сентябрь) - сдается в течении 30 календарных дней",
+                   annual_weekdays: "годовая - сдается в течении 10 рабочих дней",
+                   annual: "годовая - сдается в течении 30 календарных дней" }.freeze
   def initialize
     @current_calendar = update_info
-    @report_types = { monthly: "месячная - сдается в течении 10 рабочих дней",
-                      quarterly_weekdays: "квартальная (март, июнь, сентябрь) - сдается в течении 10 рабочих дней",
-                      quarterly: "квартальная (март, июнь, сентябрь) - сдается в течении 30 календарных дней",
-                      annual_weekdays: "годовая - сдается в течении 10 рабочих дней",
-                      annual: "годовая - сдается в течении 30 календарных дней" }
   end
 
   def closest_report
@@ -59,7 +59,7 @@ class ReportCalendar
     first = "#{report_date} крайний срок отчетности"
     date = report_date - today_date
     second = "Осталось: #{date.to_i} дней"
-    third = "Тип отчетности: #{@report_types[report_type]}"
+    third = "Тип отчетности: #{REPORT_TYPES[report_type]}"
     [first, second, third].join(" | ")
   end
 
