@@ -55,10 +55,7 @@ PLATFORMS
 DEPENDENCIES
   rake (~> 13.0)
   report_calendar!
-<<<<<<< HEAD
-=======
   rspec (~> 3.0)
->>>>>>> develop
   rubocop (>= 1.21)
 
 BUNDLED WITH
