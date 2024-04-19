@@ -1,13 +1,5 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
 # frozen_string_literal: true
 
-=======
->>>>>>> 1264e11 (Update: added monthly_report for ReportCalendar)
-=======
-# frozen_string_literal: true
-
->>>>>>> dd20150 (Update: fixed updating info about workays)
 # Вам нужно сдавать отчётность. И вы хотели бы знать сколько дней осталось до следующей сдачи. Есть несколько типов
 # отчетности:
 #
@@ -19,15 +11,8 @@
 #
 # Первый день сдачи - это начало следующего месяца. Нужно создать программу, которая возвращает крайний день сдачи
 # отчетности, и сколько дней осталось до этой даты относительно текущего времени, тип отчетности.
-
-<<<<<<< HEAD
-<<<<<<< HEAD
 require "date"
 require "net/http"
-=======
-require 'date'
-require 'net/http'
->>>>>>> 1264e11 (Update: added monthly_report for ReportCalendar)
 
 # ReportCalendar is the usefull app for trecking your report deadlines.
 class ReportCalendar
@@ -36,64 +21,23 @@ class ReportCalendar
                    quarterly: "квартальная (март, июнь, сентябрь) - сдается в течении 30 календарных дней",
                    annual_weekdays: "годовая - сдается в течении 10 рабочих дней",
                    annual: "годовая - сдается в течении 30 календарных дней" }.freeze
-=======
-require "date"
-require "net/http"
 
-# ReportCalendar is the usefull app for trecking your report deadlines.
-class ReportCalendar
->>>>>>> dd20150 (Update: fixed updating info about workays)
   def initialize
     @current_calendar = update_info
-    @report_types = { monthly: "месячная - сдается в течении 10 рабочих дней",
-                      quarterly_weekdays: "квартальная (март, июнь, сентябрь) - сдается в течении 10 рабочих дней",
-                      quarterly: "квартальная (март, июнь, сентябрь) - сдается в течении 30 календарных дней",
-                      annual_weekdays: "годовая - сдается в течении 10 рабочих дней",
-                      annual: "годовая - сдается в течении 30 календарных дней" }
   end
 
   def closest_report
-<<<<<<< HEAD
     report_dates = [annual_report, annual_report_weekdays, quarterly_report, quarterly_report_weekdays, monthly_report]
     closest_date = report_dates.min_by { |report| report[0] }
     current_report_dates = report_dates.select { |i| i[1] <= closest_date[0] }
 
     current_report_dates.each { |report_info| p output_format(report_info[0], report_info[2]) }
-=======
-    date = today_date
-    report_annual = annual_report
-    report_annual_weekdays = annual_report_weekdays
-    report_quarterly = quarterly_report
-    report_quarterly_weekdays = quarterly_report_weekdays
-    report_monthly = monthly_report
-    report_dates = [report_annual - date, report_annual_weekdays - date, report_quarterly - date,
-                    report_quarterly_weekdays - date, report_monthly - date]
-
-    if report_dates[1] == report_dates.min
-      p output_format(report_annual_weekdays, :annual_weekdays)
-      p output_format(report_monthly, :monthly)
-      p output_format(report_annual, :annual)
-    elsif report_dates[0] == report_dates.min
-      p output_format(report_annual, :annual)
-    elsif report_dates[3] == report_dates.min
-      p output_format(report_quarterly_weekdays, :quarterly_weekdays)
-      p output_format(report_monthly, :monthly)
-      p output_format(report_quarterly, :quarterly)
-    elsif report_dates[2] == report_dates.min
-      p output_format(report_quarterly, :quarterly)
-    elsif report_dates[4] == report_dates.min
-      p output_format(report_monthly, :monthly)
-    else
-      p "Обратитесь к администратору"
-    end
->>>>>>> 57d6d82 (Update: output_format for closest_report and closest_report for ReportCalendar)
   end
 
   def output_format(report_date, report_type)
     first = "#{report_date} крайний срок отчетности"
     date = report_date - today_date
     second = "Осталось: #{date.to_i} дней"
-<<<<<<< HEAD
     third = "Тип отчетности: #{REPORT_TYPES[report_type]}"
     [first, second, third].join(" | ")
   end
@@ -156,10 +100,6 @@ class ReportCalendar
 
   def workday?(date)
     @current_calendar[date]
-=======
-    third = "Тип отчетности: #{@report_types[report_type]}"
-    [first, second, third].join(" | ")
->>>>>>> 57d6d82 (Update: output_format for closest_report and closest_report for ReportCalendar)
   end
 
   def annual_report_weekdays
