@@ -19,6 +19,19 @@ GEM
     rake (13.2.1)
     regexp_parser (2.9.0)
     rexml (3.2.6)
+    rspec (3.13.0)
+      rspec-core (~> 3.13.0)
+      rspec-expectations (~> 3.13.0)
+      rspec-mocks (~> 3.13.0)
+    rspec-core (3.13.0)
+      rspec-support (~> 3.13.0)
+    rspec-expectations (3.13.0)
+      diff-lcs (>= 1.2.0, < 2.0)
+      rspec-support (~> 3.13.0)
+    rspec-mocks (3.13.0)
+      diff-lcs (>= 1.2.0, < 2.0)
+      rspec-support (~> 3.13.0)
+    rspec-support (3.13.1)
     rubocop (1.63.2)
       json (~> 2.3)
       language_server-protocol (>= 3.17.0)
@@ -42,6 +55,7 @@ PLATFORMS
 DEPENDENCIES
   rake (~> 13.0)
   report_calendar!
+  rspec (~> 3.0)
   rubocop (>= 1.21)
 
 BUNDLED WITH
