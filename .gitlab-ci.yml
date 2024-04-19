@@ -5,6 +5,3 @@ default:
     - gem install bundler -v 2.5.7
     - bundle install
 
-example_job:
-  script:
-    - bundle exec rake
