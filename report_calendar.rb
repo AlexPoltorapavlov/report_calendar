@@ -80,10 +80,15 @@ class ReportCalendar
     end
   end
 
-  def monthly_report
+  def dates_info_monthly_report
     date = today_date
     next_month = date.month == 12 ? 1 : date.month + 1
     year = date.month == 12 ? date.year + 1 : date.year
+    [year, next_month, date]
+  end
+
+  def monthly_report
+    year, next_month, date = dates_info_monthly_report
     current_month_report = add_weekdays(Date.new(date.year, date.month, 1))
     unless (date - current_month_report).to_i.positive?
       return [current_month_report, Date.new(current_month_report.year, current_month_report.month, 1),
@@ -98,8 +103,7 @@ class ReportCalendar
   end
 
   def today_date
-    # Date.today
-    Date.new(2024, 7, 10)
+    Date.today
   end
 
   def update_info(year = today_date.year)
@@ -120,6 +124,3 @@ class ReportCalendar
     date
   end
 end
-
-a = ReportCalendar.new
-a.closest_report
