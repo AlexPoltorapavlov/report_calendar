@@ -58,64 +58,8 @@ class ReportCalendar
     [Date.new(year, 1, 30), Date.new(year, 1, 1), :annual]
   end
 
-  def quarterly_report
-    date = today_date
-    months_for_report = [Date.new(date.year, 4, 30), Date.new(date.year, 7, 30), Date.new(date.year, 10, 30)]
-    months_for_report.each do |report_day|
-      return [report_day, Date.new(report_day.year, report_day.month, 1), :quarterly] if (report_day - date).positive?
-    end
-  end
-
-  def quarterly_report_weekdays
-    date = today_date
-    months_for_report = [Date.new(date.year, 4, 1), Date.new(date.year, 7, 1), Date.new(date.year, 10, 1)]
-    months_for_report = months_for_report.map do |report_day|
-      add_weekdays(report_day)
-    end
-
-    months_for_report.each do |report_day|
-      if (report_day - date).positive?
-        return [report_day, Date.new(report_day.year, report_day.month, 1), :quarterly_weekdays]
-      end
-    end
-  end
-
-  def dates_info_monthly_report
-    date = today_date
-    next_month = date.month == 12 ? 1 : date.month + 1
-    year = date.month == 12 ? date.year + 1 : date.year
-    [year, next_month, date]
-  end
-
-  def monthly_report
-    year, next_month, date = dates_info_monthly_report
-    current_month_report = add_weekdays(Date.new(date.year, date.month, 1))
-    unless (date - current_month_report).to_i.positive?
-      return [current_month_report, Date.new(current_month_report.year, current_month_report.month, 1),
-              :monthly]
-    end
-
-    [add_weekdays(Date.new(year, next_month, 1)), Date.new(year, next_month, 1), :monthly]
-  end
-
   def workday?(date)
     @current_calendar[date]
-  end
-
-  def annual_report_weekdays
-    date = today_date
-    year = date.month == 1 ? date.year : date.year + 1
-    report_day = Date.new(year, 1, 1)
-    report_day = add_weekdays(report_day)
-    return report_day if (report_day - date).positive?
-
-    [add_weekdays(Date.new(year + 1, 1, 1)), Date.new(year + 1, 1, 1), :annual_weekdays]
-  end
-
-  def annual_report
-    date = today_date
-    year = date.month == 1 && date.day != 31 ? date.year : date.year + 1
-    [Date.new(year, 1, 30), Date.new(year, 1, 1), :annual]
   end
 
   def quarterly_report
@@ -156,10 +100,6 @@ class ReportCalendar
     end
 
     [add_weekdays(Date.new(year, next_month, 1)), Date.new(year, next_month, 1), :monthly]
-  end
-
-  def workday?(date)
-    @current_calendar[date]
   end
 
   def today_date
@@ -177,14 +117,6 @@ class ReportCalendar
   end
 
   def add_weekdays(date, days = 10)
-    while days.positive?
-      date += 1
-      days -= 1 if workday?(date) == "0"
-    end
-    date
-  end
-
-  def add_weekdays(date, days)
     while days.positive?
       date += 1
       days -= 1 if workday?(date) == "0"
