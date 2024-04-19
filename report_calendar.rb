@@ -27,32 +27,11 @@ class ReportCalendar
   end
 
   def closest_report
-    date = today_date
-    report_annual = annual_report
-    report_annual_weekdays = annual_report_weekdays
-    report_quarterly = quarterly_report
-    report_quarterly_weekdays = quarterly_report_weekdays
-    report_monthly = monthly_report
-    report_dates = [report_annual - date, report_annual_weekdays - date, report_quarterly - date,
-                    report_quarterly_weekdays - date, report_monthly - date]
+    report_dates = [annual_report, annual_report_weekdays, quarterly_report, quarterly_report_weekdays, monthly_report]
+    closest_date = report_dates.min_by { |report| report[0] }
+    current_report_dates = report_dates.select { |i| i[1] <= closest_date[0] }
 
-    if report_dates[1] == report_dates.min
-      p output_format(report_annual_weekdays, :annual_weekdays)
-      p output_format(report_monthly, :monthly)
-      p output_format(report_annual, :annual)
-    elsif report_dates[0] == report_dates.min
-      p output_format(report_annual, :annual)
-    elsif report_dates[3] == report_dates.min
-      p output_format(report_quarterly_weekdays, :quarterly_weekdays)
-      p output_format(report_monthly, :monthly)
-      p output_format(report_quarterly, :quarterly)
-    elsif report_dates[2] == report_dates.min
-      p output_format(report_quarterly, :quarterly)
-    elsif report_dates[4] == report_dates.min
-      p output_format(report_monthly, :monthly)
-    else
-      p "Обратитесь к администратору"
-    end
+    current_report_dates.each { |report_info| p output_format(report_info[0], report_info[2]) }
   end
 
   def output_format(report_date, report_type)
@@ -66,24 +45,24 @@ class ReportCalendar
   def annual_report_weekdays
     date = today_date
     year = date.month == 1 ? date.year : date.year + 1
-    report_day = Date.new(year, 1, 1)
-    report_day = add_weekdays(report_day)
-    return report_day if (report_day - date).positive?
+    start_report_day = Date.new(year, 1, 1)
+    report_day = add_weekdays(start_report_day)
+    return [report_day, start_report_day, :annual_weekdays] if (report_day - date).positive?
 
-    add_weekdays(Date.new(year + 1, 1, 1))
+    [add_weekdays(Date.new(year + 1, 1, 1)), Date.new(year + 1, 1, 1), :annual_weekdays]
   end
 
   def annual_report
     date = today_date
     year = date.month == 1 && date.day != 31 ? date.year : date.year + 1
-    Date.new(year, 1, 30)
+    [Date.new(year, 1, 30), Date.new(year, 1, 1), :annual]
   end
 
   def quarterly_report
     date = today_date
     months_for_report = [Date.new(date.year, 4, 30), Date.new(date.year, 7, 30), Date.new(date.year, 10, 30)]
     months_for_report.each do |report_day|
-      return report_day if (report_day - date).positive?
+      return [report_day, Date.new(report_day.year, report_day.month, 1), :quarterly] if (report_day - date).positive?
     end
   end
 
@@ -95,7 +74,9 @@ class ReportCalendar
     end
 
     months_for_report.each do |report_day|
-      return report_day if (report_day - date).positive?
+      if (report_day - date).positive?
+        return [report_day, Date.new(report_day.year, report_day.month, 1), :quarterly_weekdays]
+      end
     end
   end
 
@@ -104,9 +85,12 @@ class ReportCalendar
     next_month = date.month == 12 ? 1 : date.month + 1
     year = date.month == 12 ? date.year + 1 : date.year
     current_month_report = add_weekdays(Date.new(date.year, date.month, 1))
-    return current_month_report unless (date - current_month_report).to_i.positive?
+    unless (date - current_month_report).to_i.positive?
+      return [current_month_report, Date.new(current_month_report.year, current_month_report.month, 1),
+              :monthly]
+    end
 
-    add_weekdays(Date.new(year, next_month, 1))
+    [add_weekdays(Date.new(year, next_month, 1)), Date.new(year, next_month, 1), :monthly]
   end
 
   def workday?(date)
