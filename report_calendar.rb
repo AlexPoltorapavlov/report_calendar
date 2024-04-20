@@ -12,8 +12,8 @@
 # Первый день сдачи - это начало следующего месяца. Нужно создать программу, которая возвращает крайний день сдачи
 # отчетности, и сколько дней осталось до этой даты относительно текущего времени, тип отчетности.
 
-require "date"
-require "net/http"
+require 'date'
+require 'net/http'
 
 # ReportCalendar is the usefull app for trecking your report deadlines.
 class ReportCalendar
