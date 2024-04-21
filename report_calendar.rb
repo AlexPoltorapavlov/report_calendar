@@ -28,7 +28,9 @@ class ReportCalendar
   end
 
   def closest_report
+    today = today_date
     report_dates = [annual_report, annual_report_weekdays, quarterly_report, quarterly_report_weekdays, monthly_report]
+    report_dates = report_dates.select { |report| report[0] > today}
     closest_date = report_dates.min_by { |report| report[0] }
     current_report_dates = report_dates.select { |i| i[0] == closest_date[0] }
 
