@@ -17,11 +17,11 @@ require 'net/http'
 
 # ReportCalendar is the usefull app for trecking your report deadlines.
 class ReportCalendar
-  REPORT_TYPES = { monthly: "месячная - сдается в течении 10 рабочих дней",
-                   quarterly_weekdays: "квартальная (март, июнь, сентябрь) - сдается в течении 10 рабочих дней",
-                   quarterly: "квартальная (март, июнь, сентябрь) - сдается в течении 30 календарных дней",
-                   annual_weekdays: "годовая - сдается в течении 10 рабочих дней",
-                   annual: "годовая - сдается в течении 30 календарных дней" }.freeze
+  REPORT_TYPES = { monthly: 'месячная - сдается в течении 10 рабочих дней',
+                   quarterly_weekdays: 'квартальная (март, июнь, сентябрь) - сдается в течении 10 рабочих дней',
+                   quarterly: 'квартальная (март, июнь, сентябрь) - сдается в течении 30 календарных дней',
+                   annual_weekdays: 'годовая - сдается в течении 10 рабочих дней',
+                   annual: 'годовая - сдается в течении 30 календарных дней' }.freeze
 
   def initialize
     @current_calendar = update_info
@@ -30,7 +30,7 @@ class ReportCalendar
   def closest_report
     today = today_date
     report_dates = [annual_report, annual_report_weekdays, quarterly_report, quarterly_report_weekdays, monthly_report]
-    report_dates = report_dates.select { |report| report[0] > today}
+    report_dates = report_dates.select { |report| report[0] > today }
     closest_date = report_dates.min_by { |report| report[0] }
     current_report_dates = report_dates.select { |i| i[0] == closest_date[0] }
 
@@ -42,7 +42,7 @@ class ReportCalendar
     date = report_date - today_date
     second = "Осталось: #{date.to_i} дней"
     third = "Тип отчетности: #{REPORT_TYPES[report_type]}"
-    [first, second, third].join(" | ")
+    [first, second, third].join(' | ')
   end
 
   def annual_report_weekdays
@@ -122,7 +122,7 @@ class ReportCalendar
   def add_weekdays(date, days = 10)
     while days.positive?
       date += 1
-      days -= 1 if workday?(date) == "0"
+      days -= 1 if workday?(date) == '0'
     end
     date
   end
